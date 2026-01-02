@@ -4,8 +4,9 @@ import { analyzeBusinessIdea } from './services/geminiService';
 import Hero from './components/Hero';
 import Dashboard from './components/Dashboard';
 import AuthModal from './components/AuthModal';
+import PricingModal from './components/PricingModal';
 import { useAuth } from './contexts/AuthContext';
-import { User, LogOut, Coins, BarChart3 } from 'lucide-react';
+import { User, LogOut, Coins, BarChart3, Crown, Sparkles } from 'lucide-react';
 import { supabase } from './lib/supabase';
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
   const { user, profile, signOut, loading, refreshProfile } = useAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authView, setAuthView] = useState<'login' | 'signup'>('login');
+  const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
 
   const handleSearch = async (query: string, model: ModelType) => {
     // 1. Check if user is logged in
@@ -99,11 +101,28 @@ const App = () => {
                   </div>
                 </div>
 
+                {/* Upgrade Button */}
+                {profile.tier === 'free' ? (
+                  <button
+                    onClick={() => setIsPricingModalOpen(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-primary to-secondary hover:opacity-90 rounded-lg text-white text-xs font-semibold transition-all shadow-lg shadow-primary/20 group"
+                    title="Fazer Upgrade"
+                  >
+                    <Sparkles size={14} className="group-hover:rotate-12 transition-transform" />
+                    Upgrade
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/30 rounded-lg text-primary text-xs font-semibold">
+                    <Crown size={14} />
+                    Premium
+                  </div>
+                )}
+
                 <div className="flex items-center gap-2">
                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 text-primary text-xs font-bold">
                       {profile.full_name?.charAt(0).toUpperCase() || 'U'}
                    </div>
-                   <button 
+                   <button
                      onClick={() => signOut()}
                      className="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-red-400 transition-colors"
                      title="Sair"
@@ -153,10 +172,16 @@ const App = () => {
         )}
       </main>
 
-      <AuthModal 
-        isOpen={isAuthModalOpen} 
-        initialView={authView} 
-        onClose={() => setIsAuthModalOpen(false)} 
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        initialView={authView}
+        onClose={() => setIsAuthModalOpen(false)}
+      />
+
+      <PricingModal
+        isOpen={isPricingModalOpen}
+        onClose={() => setIsPricingModalOpen(false)}
+        currentTier={profile?.tier || 'free'}
       />
     </div>
   );
