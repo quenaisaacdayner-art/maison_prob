@@ -11,7 +11,9 @@
       "Bash(git push:*)",
       "Bash(cat:*)",
       "Bash(npm install:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix: Replace Tailwind CDN with proper PostCSS setup for production\n\n- Install tailwindcss, postcss, autoprefixer, @tailwindcss/postcss\n- Add tailwind.config.js with custom theme configuration\n- Add postcss.config.js for build pipeline\n- Create index.css with Tailwind directives and custom styles\n- Update index.html to remove CDN and add module script\n- Update index.tsx to import CSS\n\nFixes black screen issue in Vercel production deployment.\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)"
     ]
   }
 }

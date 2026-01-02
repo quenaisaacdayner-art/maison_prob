@@ -1,12 +1,35 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Custom theme configuration for Tailwind v4 */
+@theme {
+  --font-family-sans: 'Inter', sans-serif;
+
+  --color-primary: #5B5FFF;
+  --color-secondary: #7B3FFF;
+  --color-dark: #0A0A14;
+  --color-surface: rgba(255, 255, 255, 0.05);
+
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-fade-in: fadeIn 0.5s ease-out;
+
+  @keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}
 
 /* Base styles */
 body {
   background-color: #050508;
   color: #ffffff;
   overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
 }
 
 /* Glass morphism panels */
@@ -49,15 +72,4 @@ body {
 /* Animation classes */
 .animate-fade-in {
   animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
