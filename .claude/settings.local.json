@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx supabase --help:*)",
+      "Bash(npx supabase login)",
+      "Bash(npx supabase login:*)",
+      "Bash(npx supabase:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: Add Kiwify payment integration and project documentation\n\n- Add PROJECT_OVERVIEW.md as central reference document\n- Add Supabase Edge Function for Kiwify webhooks\n- Add SQL migrations for transactions table and credit management\n- Implement HMAC signature verification for webhook security\n- Add automatic credit processing on purchase approval\n- Support subscription management \\(activate/cancel/refund\\)\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git config:*)",
+      "Bash(git push:*)",
+      "Bash(cat:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)"
+    ]
+  }
+}
