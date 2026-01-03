@@ -427,13 +427,13 @@ CREATE TABLE transactions (
 
 ### 10.4 Checklist de Implementação
 
-- [ ] Criar conta de produtor na Kiwify
-- [ ] Configurar produtos (pacotes de créditos)
-- [ ] Criar endpoint de webhook (Supabase Edge Function ou outro)
-- [ ] Configurar URL do webhook na Kiwify
-- [ ] Guardar KIWIFY_WEBHOOK_SECRET nas variáveis de ambiente
-- [ ] Criar tabela `transactions` para auditoria
-- [ ] Testar fluxo completo com compra teste
+- [x] Criar conta de produtor na Kiwify
+- [x] Configurar produtos (pacotes de créditos)
+- [x] Criar endpoint de webhook (Supabase Edge Function)
+- [x] Configurar URL do webhook na Kiwify
+- [x] Guardar KIWIFY_WEBHOOK_SECRET nas variáveis de ambiente
+- [x] Criar tabela `transactions` para auditoria
+- [x] Testar fluxo completo com compra real
 - [ ] Configurar alertas para falhas de webhook
 
 ---
@@ -445,12 +445,17 @@ CREATE TABLE transactions (
 | 2025-01-02 | Criação do documento | Claude |
 | 2025-01-02 | Implementação Edge Function Kiwify | Claude |
 | 2025-01-02 | Adição de migrations SQL para Kiwify | Claude |
+| 2025-01-03 | Modal de Preços (PricingModal) | Claude |
+| 2025-01-03 | Correção Tailwind CSS para produção | Claude |
+| 2025-01-03 | Sincronização de perfil em tempo real | Claude |
+| 2025-01-03 | Correção variáveis de ambiente Vercel | Claude |
 
 ---
 
 ## 12. Notas para Desenvolvimento
 
-1. **Antes de qualquer alteração**: Leia este documento
-2. **Após alterações significativas**: Atualize este documento
+1. **Antes de qualquer alteração**: Leia este documento e `CLAUDE.md`
+2. **Após alterações significativas**: Atualize ambos os documentos
 3. **Novas integrações**: Documente aqui antes de implementar
 4. **Problemas conhecidos**: Adicione na seção de restrições
+5. **Relatório detalhado**: Consulte `CLAUDE.md` para histórico completo
