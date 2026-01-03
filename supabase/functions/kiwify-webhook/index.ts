@@ -35,21 +35,32 @@ interface KiwifyWebhookPayload {
 }
 
 // Mapeamento de produtos para créditos
-// IMPORTANTE: Atualize com seus IDs de produto reais da Kiwify
+// Adicione seus IDs de produto reais da Kiwify aqui
 const PRODUCT_CREDITS_MAP: Record<string, { credits: number; tier?: string }> = {
-  // Pacotes de créditos avulsos
-  "prod_10_creditos": { credits: 10 },
-  "prod_50_creditos": { credits: 50 },
-  "prod_100_creditos": { credits: 100 },
-  "prod_500_creditos": { credits: 500 },
+  // Produto Premium do Kiwify (R$ 5/mês)
+  // O ID será detectado automaticamente, mas você pode adicionar IDs específicos aqui
 
-  // Planos de assinatura
-  "prod_plano_pro": { credits: 100, tier: "pro" },
-  "prod_plano_opus": { credits: 500, tier: "opus" },
-
-  // Fallback para produtos não mapeados
-  "default": { credits: 10 },
+  // Fallback: qualquer produto não mapeado será tratado como Premium
+  "default": { credits: 100, tier: "pro" },
 };
+
+// Função para detectar se é um produto premium baseado no preço
+function getProductConfigSmart(productId: string, price: number): { credits: number; tier?: string } {
+  const normalizedId = productId.toLowerCase().replace(/-/g, "_");
+
+  // Primeiro, verificar se há mapeamento específico
+  if (PRODUCT_CREDITS_MAP[normalizedId]) {
+    return PRODUCT_CREDITS_MAP[normalizedId];
+  }
+
+  // Se o preço for >= 5, é o plano Premium
+  if (price >= 5) {
+    return { credits: 100, tier: "pro" };
+  }
+
+  // Fallback
+  return PRODUCT_CREDITS_MAP["default"];
+}
 
 // Configuração CORS
 const corsHeaders = {
@@ -107,10 +118,9 @@ async function verifyKiwifySignature(
   }
 }
 
-// Obter créditos e tier baseado no produto
-function getProductConfig(productId: string): { credits: number; tier?: string } {
-  const normalizedId = productId.toLowerCase().replace(/-/g, "_");
-  return PRODUCT_CREDITS_MAP[normalizedId] || PRODUCT_CREDITS_MAP["default"];
+// Obter créditos e tier baseado no produto (mantido para compatibilidade)
+function getProductConfig(productId: string, price: number = 5): { credits: number; tier?: string } {
+  return getProductConfigSmart(productId, price);
 }
 
 // Handler principal
@@ -226,7 +236,7 @@ async function handlePurchaseApproved(
   payload: KiwifyWebhookPayload
 ): Promise<{ success: boolean; message: string; data?: any }> {
   const { customer, product, order_id } = payload;
-  const config = getProductConfig(product.id);
+  const config = getProductConfig(product.id, product.price);
 
   // Verificar se pedido já foi processado (idempotência)
   const { data: existingTx } = await supabase
@@ -362,7 +372,7 @@ async function handleRefund(
   payload: KiwifyWebhookPayload
 ): Promise<{ success: boolean; message: string; data?: any }> {
   const { customer, product, order_id } = payload;
-  const config = getProductConfig(product.id);
+  const config = getProductConfig(product.id, product.price);
 
   // Buscar usuário
   const { data: profile } = await supabase
@@ -421,7 +431,7 @@ async function logTransaction(
       .eq("email", payload.customer.email.toLowerCase())
       .single();
 
-    const config = getProductConfig(payload.product.id);
+    const config = getProductConfig(payload.product.id, payload.product.price);
 
     await supabase.from("transactions").insert({
       user_id: profile?.id || null,
